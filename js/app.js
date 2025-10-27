@@ -1,34 +1,37 @@
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
 import { GLTFLoader } from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'https://threejs.org/examples/jsm/loaders/DRACOLoader.js';
+import { gsap } from "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js";
+import { ScrollTrigger } from "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js";
 
 // --- Global Variables ---
 let scene, camera, renderer, model;
-const mouse = new window.THREE.Vector2();
+const mouse = new THREE.Vector2();
 
 // --- Initialization ---
 function init() {
     // Scene
-    scene = new window.THREE.Scene();
+    scene = new THREE.Scene();
 
     // Camera
-    camera = new window.THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
 
     // Renderer
-    renderer = new window.THREE.WebGLRenderer({
+    renderer = new THREE.WebGLRenderer({
         canvas: document.querySelector('#webgl-canvas'),
         alpha: true,
         antialias: true
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = window.THREE.ACESFilmicToneMapping;
-    renderer.outputEncoding = window.THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.outputEncoding = THREE.sRGBEncoding;
 
     // Lights
-    const ambientLight = new window.THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
-    const dirLight = new window.THREE.DirectionalLight(0xffffff, 1);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
     dirLight.position.set(5, 5, 5);
     scene.add(dirLight);
 
@@ -72,8 +75,8 @@ function animate() {
 
     // Mouse tilt effect
     if (model) {
-        model.rotation.y = window.THREE.MathUtils.lerp(model.rotation.y, mouse.x * 0.2, 0.05);
-        model.rotation.x = window.THREE.MathUtils.lerp(model.rotation.x, -mouse.y * 0.2, 0.05);
+        model.rotation.y = THREE.MathUtils.lerp(model.rotation.y, mouse.x * 0.2, 0.05);
+        model.rotation.x = THREE.MathUtils.lerp(model.rotation.x, -mouse.y * 0.2, 0.05);
     }
 
     renderer.render(scene, camera);
@@ -94,11 +97,11 @@ function onMouseMove(event) {
 
 // --- GSAP Scrollytelling ---
 function setupScrollAnimations() {
-    window.gsap.registerPlugin(window.ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger);
 
     // Make sections visible
-    window.gsap.utils.toArray('.scroll-section').forEach((section, index) => {
-        window.gsap.to(section, {
+    gsap.utils.toArray('.scroll-section').forEach((section, index) => {
+        gsap.to(section, {
             opacity: 1,
             scrollTrigger: {
                 trigger: section,
@@ -110,7 +113,7 @@ function setupScrollAnimations() {
     });
 
     // --- Master 3D Animation Timeline ---
-    const tl = window.gsap.timeline({
+    const tl = gsap.timeline({
         scrollTrigger: {
             trigger: ".scroll-container",
             start: "top top",
