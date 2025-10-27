@@ -1,3 +1,6 @@
+import { GLTFLoader } from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'https://threejs.org/examples/jsm/loaders/DRACOLoader.js';
+
 // --- Global Variables ---
 let scene, camera, renderer, model;
 const mouse = new window.THREE.Vector2();
@@ -30,11 +33,10 @@ function init() {
     scene.add(dirLight);
 
     // --- Load 3D Model ---
-    // Use the globally exposed loaders
-    const dracoLoader = new window.DRACOLoader();
+    const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
 
-    const loader = new window.GLTFLoader();
+    const loader = new GLTFLoader();
     loader.setDRACOLoader(dracoLoader);
 
     // NOTE: This is a placeholder model. Replace with your watch.glb
