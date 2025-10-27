@@ -92,11 +92,11 @@ function onMouseMove(event) {
 
 // --- GSAP Scrollytelling ---
 function setupScrollAnimations() {
-    gsap.registerPlugin(ScrollTrigger);
+    window.gsap.registerPlugin(window.ScrollTrigger);
 
     // Make sections visible
-    gsap.utils.toArray('.scroll-section').forEach((section, index) => {
-        gsap.to(section, {
+    window.gsap.utils.toArray('.scroll-section').forEach((section, index) => {
+        window.gsap.to(section, {
             opacity: 1,
             scrollTrigger: {
                 trigger: section,
@@ -108,7 +108,7 @@ function setupScrollAnimations() {
     });
 
     // --- Master 3D Animation Timeline ---
-    const tl = gsap.timeline({
+    const tl = window.gsap.timeline({
         scrollTrigger: {
             trigger: ".scroll-container",
             start: "top top",
