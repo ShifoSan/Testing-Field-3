@@ -1,100 +1,95 @@
-:root {
-    --text-color: #f0f0f0;
-    --bg-color: #05050a;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Montserrat:wght@400;700&display=swap');
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
-
-#webgl-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    outline: none;
-    z-index: 1;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: #fff;
+    overflow-x: hidden;
 }
 
 .scroll-container {
+    width: 100%;
     position: relative;
-    z-index: 2;
 }
 
-.scroll-section {
+#webgl-canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+}
+
+canvas {
+    display: block;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+    z-index: 10;
+    text-align: center;
+    pointer-events: none;
+}
+
+.header h1 {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.5em;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.section {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    padding: 10vh 5vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start; /* Align text to the left */
-    height: 100vh;
-    padding: 0 10vw;
-    position: relative;
-    opacity: 0; /* Will be faded in by GSAP */
+    align-items: flex-start;
+    max-width: 500px;
 }
 
-h1 {
-    font-family: 'Exo 2', sans-serif;
-    font-size: 8rem;
-    font-weight: 900;
-    letter-spacing: -2px;
+#section-one {
+    justify-content: center;
+    text-align: left;
+}
+#section-one h2 {
+    font-size: 5rem;
+    line-height: 1.1;
+}
+
+#section-two {
+    align-items: flex-end;
+    text-align: right;
+}
+
+#section-three {
+    align-items: center;
+    text-align: center;
+}
+
+#section-four {
+    align-items: center;
+    text-align: center;
 }
 
 h2 {
-    font-family: 'Exo 2', sans-serif;
-    font-size: 4rem;
-    font-weight: 700;
+    font-size: 3.5rem;
     margin-bottom: 1rem;
-    background: linear-gradient(90deg, #00ffff, #8a2be2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 p {
-    font-size: 1.25rem;
-    max-width: 400px;
-}
-
-/* Specific section alignments */
-#hero { align-items: center; text-align: center; }
-#feature-1 { align-items: flex-start; }
-#feature-2 { align-items: flex-end; text-align: right; }
-#feature-3-explode { align-items: center; text-align: center; }
-#cta { align-items: center; text-align: center; }
-
-/* Labels for exploded view */
-.feature-label {
-    position: absolute;
-    color: var(--text-color);
-    background: rgba(0, 0, 0, 0.4);
-    border-left: 3px solid var(--text-color);
-    padding: 10px 15px;
-    font-weight: 700;
-    opacity: 0; /* Controlled by GSAP */
-    visibility: hidden; /* Controlled by GSAP */
-    backdrop-filter: blur(5px);
-}
-
-button {
-    font-family: 'Exo 2', sans-serif;
     font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--bg-color);
-    background-color: #00ffff;
-    border: none;
-    padding: 15px 40px;
-    margin-top: 2rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-}
-button:hover {
-    background-color: #fff;
-    box-shadow: 0 0 20px #fff;
+    line-height: 1.6;
+    max-width: 450px;
 }
