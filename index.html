@@ -147,6 +147,25 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
+        // Animate text content
+        gsap.utils.toArray('.content-section').forEach(section => {
+            gsap.fromTo(section.children,
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.2,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 70%",
+                        end: "bottom 30%",
+                        toggleActions: "play reverse play reverse"
+                    }
+                }
+            );
+        });
     </script>
 </body>
 </html>
