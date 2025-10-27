@@ -3,47 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Vortex Smartwatch</title>
+    <title>Vortex Smartwatch</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700;900&family=Inter:wght@400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <canvas id="webgl-canvas"></canvas>
-
-    <main class="scroll-container">
-        <section class="scroll-section" id="hero">
+    <div class="scroll-container">
+        <div id="webgl-canvas-container"></div>
+        <header class="header">
             <h1>VORTEX</h1>
-            <p>Redefining Time</p>
+        </header>
+        <section class="section" id="section-one">
+            <h2>The Future, Now.</h2>
         </section>
-
-        <section class="scroll-section" id="feature-1">
-            <h2>Holographic Display</h2>
-            <p>A crystal-clear interface that floats on air.</p>
+        <section class="section" id="section-two">
+            <h2>Precision Engineered</h2>
+            <p>Built with aerospace-grade titanium and sapphire glass.</p>
         </section>
-
-        <section class="scroll-section" id="feature-2">
-            <h2>Bio-Weave Sensor</h2>
-            <p>The most advanced health monitor on the planet.</p>
-        </section>
-
-        <section class="scroll-section" id="feature-3-explode">
+        <section class="section" id="section-three">
             <h2>Exploded View</h2>
-            <p>See the craftsmanship in every component.</p>
-
-            <div id="label-screen" class="feature-label">Quantum Glass Screen</div>
-            <div id="label-body" class="feature-label">Titanium-Core Body</div>
-            <div id="label-sensor" class="feature-label">Bio-Weave Array</div>
+            <p>See what makes it tick.</p>
         </section>
-
-        <section class="scroll-section" id="cta">
-            <h2>Vortex</h2>
-            <p>The future is on your wrist.</p>
-            <button>Order Now</button>
+        <section class="section" id="section-four">
+            <h2>Unleash Your Potential</h2>
+            <p>Pre-order today.</p>
         </section>
-    </main>
-
+    </div>
     <script type="module" src="js/app.js"></script>
 </body>
 </html>

@@ -1,173 +1,116 @@
-import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
-import { GLTFLoader } from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'https://threejs.org/examples/jsm/loaders/DRACOLoader.js';
-import { gsap } from "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js";
-import { ScrollTrigger } from "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js";
+import * as THREE from 'https://cdn.skypack.dev/three@0.128.0/build/three.module.js';
+import { gsap } from 'https://cdn.skypack.dev/gsap@3.9.1';
+import { ScrollTrigger } from 'https://cdn.skypack.dev/gsap@3.9.1/ScrollTrigger';
 
-// --- Global Variables ---
-let scene, camera, renderer, model;
-const mouse = new THREE.Vector2();
+gsap.registerPlugin(ScrollTrigger);
 
-// --- Initialization ---
-function init() {
-    // Scene
-    scene = new THREE.Scene();
+class WebGLApp {
+    constructor() {
+        this.container = document.getElementById('webgl-canvas-container');
+        this.camera = new THREE.PerspectiveCamera(75, this.container.offsetWidth / this.container.offsetHeight, 0.1, 1000);
+        this.camera.position.z = 5;
 
-    // Camera
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+        this.scene = new THREE.Scene();
 
-    // Renderer
-    renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector('#webgl-canvas'),
-        alpha: true,
-        antialias: true
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.container.appendChild(this.renderer.domElement);
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight.position.set(5, 5, 5);
-    scene.add(dirLight);
+        this.setupLights();
+        this.createModel();
+        this.setupAnimations();
 
-    // --- Load 3D Model ---
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-
-    const loader = new GLTFLoader();
-    loader.setDRACOLoader(dracoLoader);
-
-    // NOTE: This is a placeholder model. Replace with your watch.glb
-    // For this demo, we use a complex model that is publicly available.
-    loader.load(
-        'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
-        (gltf) => {
-            model = gltf.scene;
-            model.scale.set(1.5, 1.5, 1.5);
-            model.position.y = -1; // Center it
-            scene.add(model);
-
-            // We have the model, now set up animations
-            setupScrollAnimations();
-        },
-        undefined,
-        (error) => {
-            console.error('An error happened while loading the model:', error);
-        }
-    );
-
-    // Event Listeners
-    window.addEventListener('resize', onWindowResize);
-    window.addEventListener('mousemove', onMouseMove);
-
-    // Start render loop
-    animate();
-}
-
-// --- Animation Loop ---
-function animate() {
-    requestAnimationFrame(animate);
-
-    // Mouse tilt effect
-    if (model) {
-        model.rotation.y = THREE.MathUtils.lerp(model.rotation.y, mouse.x * 0.2, 0.05);
-        model.rotation.x = THREE.MathUtils.lerp(model.rotation.x, -mouse.y * 0.2, 0.05);
+        window.addEventListener('resize', this.onWindowResize.bind(this));
+        this.animate();
     }
 
-    renderer.render(scene, camera);
-}
+    setupLights() {
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        this.scene.add(ambientLight);
 
-// --- Event Handlers ---
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 5);
+        this.scene.add(directionalLight);
+    }
 
-function onMouseMove(event) {
-    // Normalize mouse position (-1 to +1)
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-}
+    createModel() {
+        // Using a group to simulate an "explodable" model
+        this.modelGroup = new THREE.Group();
 
-// --- GSAP Scrollytelling ---
-function setupScrollAnimations() {
-    gsap.registerPlugin(ScrollTrigger);
+        const coreGeo = new THREE.IcosahedronGeometry(1, 0);
+        const coreMat = new THREE.MeshStandardMaterial({ color: 0x2a9d8f, roughness: 0.3, metalness: 0.8 });
+        const core = new THREE.Mesh(coreGeo, coreMat);
+        this.modelGroup.add(core);
 
-    // Make sections visible
-    gsap.utils.toArray('.scroll-section').forEach((section, index) => {
-        gsap.to(section, {
-            opacity: 1,
+        // Create "satellite" parts to explode outwards
+        for (let i = 0; i < 8; i++) {
+            const partGeo = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+            const partMat = new THREE.MeshStandardMaterial({ color: 0xe9c46a, roughness: 0.5, metalness: 0.5 });
+            const part = new THREE.Mesh(partGeo, partMat);
+
+            const angle = (i / 8) * Math.PI * 2;
+            part.position.set(Math.cos(angle) * 1.5, Math.sin(angle) * 1.5, 0);
+            this.modelGroup.add(part);
+        }
+
+        this.scene.add(this.modelGroup);
+    }
+
+    setupAnimations() {
+        const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: section,
-                start: "top 70%",
-                end: "bottom 30%",
-                toggleActions: "play reverse play reverse"
+                trigger: ".scroll-container",
+                scrub: 1,
+                start: "top top",
+                end: "bottom bottom"
             }
         });
-    });
 
-    // --- Master 3D Animation Timeline ---
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: ".scroll-container",
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1, // Smoothly link animation to scroll
-        }
-    });
+        // Section 1 -> 2: Rotate and zoom in
+        tl.to(this.modelGroup.rotation, { x: Math.PI * 2, y: Math.PI * 2 }, 0);
+        tl.to(this.camera.position, { z: 3 }, 0);
 
-    // --- ANIMATION STAGES ---
+        // Section 2 -> 3: Prepare for exploded view
+        tl.to(this.camera.position, { z: 8 }, 'explode_start');
+        tl.to(this.modelGroup.rotation, { x: Math.PI * 4, y: Math.PI * 4 }, 'explode_start');
 
-    // 1. Hero -> Feature 1: Zoom in on the "Face"
-    tl.to(camera.position, { z: 2.5, y: 0.5 }, "start");
-    tl.to(model.rotation, { x: 0.5, y: 0.2 }, "start");
+        // Section 3 -> 4: Explode the view
+        this.modelGroup.children.forEach((child, index) => {
+            if (index > 0) { // Don't move the core
+                const initialPosition = child.position.clone();
+                const targetPosition = initialPosition.clone().multiplyScalar(2.5);
+                tl.to(child.position, {
+                    x: targetPosition.x,
+                    y: targetPosition.y,
+                    z: targetPosition.z,
+                }, 'explode_start');
+            }
+        });
 
-    // 2. Feature 1 -> Feature 2: Rotate to show the "Back"
-    tl.to(model.rotation, { y: Math.PI * 1.2, x: 0.2 }, "feature2");
-
-    // 3. Feature 2 -> Feature 3: Move camera and prep for explosion
-    tl.to(camera.position, { z: 4, y: 0 }, "feature3");
-    tl.to(model.rotation, { y: Math.PI * 2, x: 0 }, "feature3");
-
-    // 4. THE EXPLODED VIEW
-    // We *assume* the model's parts are named.
-    // In a real project, you'd open the .glb in Blender to get these names.
-    // We will target the placeholder model's parts.
-    const screen = model.getObjectByName('visor'); // Placeholder name
-    const body = model.getObjectByName('backpack'); // Placeholder name
-    const sensor = model.getObjectByName('Object_10'); // Placeholder name
-
-    if (screen && body && sensor) {
-        tl.to(screen.position, { z: 2 }, "explode");
-        tl.to(body.position, { z: -1.5 }, "explode");
-        tl.to(sensor.position, { y: 0.5, x: 1.5 }, "explode");
-
-        // Animate labels
-        tl.to("#label-screen", { opacity: 1, visibility: 'visible' }, "explode");
-        tl.to("#label-body", { opacity: 1, visibility: 'visible' }, "explode");
-        tl.to("#label-sensor", { opacity: 1, visibility: 'visible' }, "explode");
+        // Section 4 -> End: Reassemble
+        this.modelGroup.children.forEach((child, index) => {
+            if (index > 0) {
+                 tl.to(child.position, {
+                    x: child.position.x / 2.5,
+                    y: child.position.y / 2.5,
+                    z: child.position.z / 2.5,
+                });
+            }
+        });
+        tl.to(this.camera.position, { z: 4 }, 'reassemble');
     }
 
-    // 5. Feature 3 -> CTA: Reassemble the model
-    if (screen && body && sensor) {
-        tl.to(screen.position, { z: 0 }, "reassemble");
-        tl.to(body.position, { z: 0 }, "reassemble");
-        tl.to(sensor.position, { y: 0, x: 0 }, "reassemble");
-
-        // Hide labels
-        tl.to(".feature-label", { opacity: 0, visibility: 'hidden' }, "reassemble");
+    animate() {
+        requestAnimationFrame(this.animate.bind(this));
+        this.renderer.render(this.scene, this.camera);
     }
 
-    // 6. Final CTA: Reset camera
-    tl.to(camera.position, { z: 5, y: 0 }, "end");
-    tl.to(model.rotation, { x: 0, y: 0 }, "end");
+    onWindowResize() {
+        this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
+    }
 }
 
-// --- Start ---
-init();
+new WebGLApp();
