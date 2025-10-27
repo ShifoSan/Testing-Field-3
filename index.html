@@ -6,8 +6,12 @@
     <title>Synapse Orb Showcase</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --secondary-text-color: #a0a0b0;
+        }
+
         body {
             background-color: #000000;
             color: #FFFFFF;
@@ -36,9 +40,15 @@
             padding: 0 2rem;
         }
 
+        h1, h2 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
         h1 {
             font-size: 4rem;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         h2 {
@@ -49,7 +59,42 @@
         p {
             font-size: 1.2rem;
             max-width: 600px;
+            color: var(--secondary-text-color);
         }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            color: var(--secondary-text-color);
+            margin-bottom: 1rem;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .content-section:first-child h1 {
+            background: linear-gradient(90deg, #00ffff, #8a2be2, #ff00ff, #00ffff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientAnimation 8s ease infinite;
+        }
+
+        footer {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 50px 2rem;
+            color: #a0a0b0;
+            font-size: 0.9rem;
+        }
+
     </style>
 </head>
 <body>
@@ -59,18 +104,43 @@
     <section class="content-section">
         <h1>The Synapse Orb</h1>
     </section>
+
+    <section class="content-section">
+        <p>The Synapse Orb is more than an assistant; it's a co-processor for your mind. It learns, intuits, and connects your digital and physical worlds into one seamless experience.</p>
+    </section>
+
     <section class="content-section">
         <h2>Evolved Intelligence</h2>
         <p>A new core that learns and adapts.</p>
     </section>
+
+    <section class="content-section">
+        <h2>Core Specifications</h2>
+        <ul>
+            <li>5 Petaflop Compute Core</li>
+            <li>Quantum-Weave Casing</li>
+            <li>Real-time Context Sync</li>
+            <li>Zero-Latency Neural Interface</li>
+        </ul>
+    </section>
+
     <section class="content-section">
         <h2>Hyper-Conductive Shell</h2>
         <p>Material science at the atomic level.</p>
     </section>
+
+    <section class="content-section">
+        <p>Crafted from a self-healing graphene polymer, the shell acts as a passive sensor array, drawing ambient energy and data from its surroundings.</p>
+    </section>
+
     <section class="content-section">
         <h2>Join the Revolution</h2>
         <p>The future is here.</p>
     </section>
+
+    <footer>
+        <p>&copy; 2025 Synapse Dynamics. All rights reserved.</p>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
@@ -118,6 +188,9 @@
         // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
+            // Add a slow constant rotation
+            torusKnot.rotation.x += 0.001;
+            torusKnot.rotation.y += 0.0005;
             renderer.render(scene, camera);
         }
         animate();
@@ -125,6 +198,7 @@
         // GSAP Timeline
         const tl = gsap.timeline();
 
+        // Original animation points
         tl.to(torusKnot.rotation, { y: Math.PI * 2 })
           .to(camera.position, { z: 3 })
           .to(pointLight1.color, { r: 1, g: 0, b: 0 })
