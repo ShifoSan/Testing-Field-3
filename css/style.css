@@ -1,0 +1,100 @@
+:root {
+    --text-color: #f0f0f0;
+    --bg-color: #05050a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+#webgl-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+    z-index: 1;
+}
+
+.scroll-container {
+    position: relative;
+    z-index: 2;
+}
+
+.scroll-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Align text to the left */
+    height: 100vh;
+    padding: 0 10vw;
+    position: relative;
+    opacity: 0; /* Will be faded in by GSAP */
+}
+
+h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 8rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+}
+
+h2 {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #00ffff, #8a2be2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p {
+    font-size: 1.25rem;
+    max-width: 400px;
+}
+
+/* Specific section alignments */
+#hero { align-items: center; text-align: center; }
+#feature-1 { align-items: flex-start; }
+#feature-2 { align-items: flex-end; text-align: right; }
+#feature-3-explode { align-items: center; text-align: center; }
+#cta { align-items: center; text-align: center; }
+
+/* Labels for exploded view */
+.feature-label {
+    position: absolute;
+    color: var(--text-color);
+    background: rgba(0, 0, 0, 0.4);
+    border-left: 3px solid var(--text-color);
+    padding: 10px 15px;
+    font-weight: 700;
+    opacity: 0; /* Controlled by GSAP */
+    visibility: hidden; /* Controlled by GSAP */
+    backdrop-filter: blur(5px);
+}
+
+button {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--bg-color);
+    background-color: #00ffff;
+    border: none;
+    padding: 15px 40px;
+    margin-top: 2rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+button:hover {
+    background-color: #fff;
+    box-shadow: 0 0 20px #fff;
+}
